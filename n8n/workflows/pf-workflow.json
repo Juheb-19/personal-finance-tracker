@@ -1,0 +1,92 @@
+{
+  "name": "Personal Finance Tracker - Starter",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "incoming-transaction",
+        "options": {}
+      },
+      "name": "Inbound Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Parse incoming message (amount, description, date)\n// Call LLM for categorization (optional)\nreturn items;"
+      },
+      "name": "Parse & Categorize (Function)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        500,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{$env.LLM_API_URL}}",
+        "method": "POST",
+        "jsonParameters": true,
+        "bodyParametersJson": "={\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"system\",\"content\":\"Categorize the following expense into categories like Food, Transport, Bills, Groceries, Entertainment.\"},{\"role\":\"user\",\"content\":{{$json[\"text\"]}}}], \"max_tokens\":200}"
+      },
+      "name": "Call LLM (HTTP Request)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        750,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Save transaction to Supabase via HTTP Request node (placeholder)\nreturn items;"
+      },
+      "name": "Save Transaction",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        250
+      ]
+    }
+  ],
+  "connections": {
+    "Inbound Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse & Categorize (Function)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Categorize (Function)": {
+      "main": [
+        [
+          {
+            "node": "Call LLM (HTTP Request)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call LLM (HTTP Request)": {
+      "main": [
+        [
+          {
+            "node": "Save Transaction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+- Add transactions via WhatsApp/Telegram or manual UI
+- AI-based categorization of expenses
+- Budgets & alerts
+- Monthly & yearly reports with charts
+- Export CSV and PDF reports
+- Supabase-backed storage and Next.js dashboard
