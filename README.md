@@ -8,4 +8,4 @@ Main components:
 - **Next.js** dashboard starter for viewing transactions, budgets, and charts.
 - **Sample connectors** (placeholders) for WhatsApp and Telegram.
 
-This is a starter skeleton designed to be pushed to your GitHub repo and iterated on.
+
